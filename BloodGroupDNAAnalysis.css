@@ -1,0 +1,67 @@
+.blood-group-analysis {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.blood-group-analysis h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.upload-section {
+  margin: 20px 0;
+  padding: 20px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.upload-section input[type="file"] {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.upload-section input[type="file"]:disabled {
+  background-color: #eee;
+  cursor: not-allowed;
+}
+
+.helper-text {
+  color: #666;
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+.error-message {
+  color: #d32f2f;
+  background-color: #ffebee;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+
+.loading {
+  color: #1976d2;
+  margin: 10px 0;
+  font-weight: bold;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+} 
