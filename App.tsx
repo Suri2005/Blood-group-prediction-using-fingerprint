@@ -1,52 +1,100 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ThemeProvider, CssBaseline, Box } from '@mui/material';
-import { motion, AnimatePresence } from 'framer-motion';
-import theme from './theme';
+import { Box, CssBaseline, Container } from '@mui/material';
+import { ThemeProvider, useThemeContext } from './context/ThemeContext';
+import { AuthProvider } from './context/AuthContext';
+import { BloodGroupProvider } from './context/BloodGroupContext';
+import MenuButton from './components/MenuButton';
 import Home from './components/Home';
-import Login from './components/auth/Login';
-import SignUp from './components/auth/SignUp';
-import AdvancedAnalysis from './components/AdvancedAnalysis';
-import Sidebar from './components/Sidebar';
+import Login from './components/Login';
+import Signup from './components/Signup';
+import { Predict } from './components/Predict';
+import AIHealthChat from './components/AIHealthChat';
+import AIDashboard from './components/AIDashboard';
+import AIBloodGroupPredictor from './components/AIBloodGroupPredictor';
+import BloodGroupDNAAnalysis from './components/BloodGroupDNAAnalysis';
+import HealthScorePage from './components/HealthScorePage';
+import BloodDonorsList from './components/BloodDonorsList';
+import Feedback from './components/Feedback';
+import Security from './components/Security';
+import VisualizationContainer from './components/VisualizationContainer';
+import ThreeDimensionalView from './components/ThreeDimensionalView';
+import BloodGroupVisualization from './components/BloodGroupVisualization';
 
-const App: React.FC = () => {
+function AppContent() {
+  const { themeMode } = useThemeContext();
+
+  const handlePredictionComplete = (bloodGroup: string, confidence: number) => {
+    console.log(`Prediction complete: Blood Group ${bloodGroup} with ${confidence}% confidence`);
+  };
+
   return (
-    <ThemeProvider theme={theme}>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        background: themeMode === 'dark' 
+          ? 'linear-gradient(135deg, #121212 0%, #1e1e1e 100%)'
+          : 'linear-gradient(135deg, #f5f5f5 0%, #e0f7fa 100%)',
+      }}
+    >
       <CssBaseline />
-      <Router>
-        <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-          <Sidebar />
-          <Box
-            component="main"
-            sx={{
-              flexGrow: 1,
-              p: 3,
-              width: { sm: `calc(100% - 240px)` },
-              ml: { sm: '240px' },
-              background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-            }}
-          >
-            <AnimatePresence mode="wait">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/signup" element={<SignUp />} />
-                  <Route path="/analysis" element={<AdvancedAnalysis />} />
-                  {/* Add more routes as needed */}
-                </Routes>
-              </motion.div>
-            </AnimatePresence>
-          </Box>
-        </Box>
-      </Router>
-    </ThemeProvider>
+      <MenuButton />
+      <Box 
+        component="main" 
+        sx={{ 
+          flex: 1, 
+          pt: { xs: 9, sm: 10 }, 
+          pb: 6,
+          px: { xs: 2, sm: 3 },
+        }}
+      >
+        <Container maxWidth="lg" sx={{ height: '100%' }}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/predict" element={<Predict />} />
+            <Route path="/chat" element={<AIHealthChat />} />
+            <Route path="/ai-dashboard" element={<AIDashboard />} />
+            <Route path="/ai-predictor" element={<AIBloodGroupPredictor />} />
+            <Route path="/dna-analysis" element={<BloodGroupDNAAnalysis onPredictionComplete={handlePredictionComplete} />} />
+            <Route path="/health-score" element={<HealthScorePage />} />
+            <Route path="/blood-donors" element={<BloodDonorsList />} />
+            <Route path="/visualization" element={<BloodGroupVisualization />} />
+            <Route path="/3d-view" element={
+              <ThreeDimensionalView 
+                data={{
+                  points: Array.from({ length: 1000 }, () => [
+                    Math.random() * 10 - 5,
+                    Math.random() * 10 - 5,
+                    Math.random() * 10 - 5
+                  ])
+                }}
+              />
+            } />
+            <Route path="/feedback" element={<Feedback />} />
+            <Route path="/security" element={<Security />} />
+          </Routes>
+        </Container>
+      </Box>
+    </Box>
   );
-};
+}
+
+function App() {
+  return (
+    <Router>
+      <ThemeProvider>
+        <AuthProvider>
+          <BloodGroupProvider>
+            <AppContent />
+          </BloodGroupProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </Router>
+  );
+}
 
 export default App; 
